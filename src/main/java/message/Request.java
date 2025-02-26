@@ -6,6 +6,7 @@ import java.io.InputStream;
 public class Request {
     private int length ;
     private RequestHeader header ;
+    private byte[] message;
 
 
     public Request(){
@@ -19,6 +20,8 @@ public class Request {
             this.header.setApikey(fromByteArrayToShort(rawRequest.readNBytes(2)));
             this.header.setApiVersion(fromByteArrayToShort(rawRequest.readNBytes(2)));
             this.header.setCorrelationId(fromByteArrayToInt(rawRequest.readNBytes(4)));
+
+            setMessage(rawRequest.readNBytes(length-8));
 
         } catch (IOException e){
             System.out.println("REQUEST Service, error: a problem occurred constructing the request : "+ e.toString());
@@ -51,5 +54,13 @@ public class Request {
 
     public void setHeader(RequestHeader header) {
         this.header = header;
+    }
+
+    public byte[] getMessage(){
+        return this.message;
+    }
+
+    public void setMessage(byte[] message){
+        this.message = message;
     }
 }
